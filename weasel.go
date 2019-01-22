@@ -128,15 +128,16 @@ func IndexHandler(w http.ResponseWriter, req *http.Request) {
 
 // AboutHandler renders a character in a Web page
 func GuideHandler(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("GuideHandler call")
+	rs := fmt.Sprintf("%#v", req)
+	fmt.Println("GuideHandler call: " + rs)
 	status := "weasel guide"
 
 	wv := WebView {
 		Title: "Click counter: " + status,
 	}
 	// Render page
-	//Render(w, "weaseltemplates/gc-ermine.html", wv)
-	Render(w, "weaseltemplates/200.html", wv)
+	Render(w, "weaseltemplates/gc-ermine.html", wv)
+	//Render(w, "weaseltemplates/200.html", wv)
 }
 
 
