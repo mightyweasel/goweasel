@@ -121,8 +121,8 @@ func IndexHandler(w http.ResponseWriter, req *http.Request) {
 		Title: "Click counter: " + status,
 	}
 	// Render page
-	//Render(w, "weaseltemplates/gc-ermine.html", wv)
-	Render(w, "weaseltemplates/200.html", wv)
+	Render(w, "weaseltemplates/gc-ermine.html", wv)
+	//Render(w, "weaseltemplates/200.html", wv)
 
 }
 

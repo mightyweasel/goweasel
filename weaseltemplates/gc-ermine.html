@@ -1,3 +1,4 @@
+{{define "base"}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -285,5 +286,12 @@
     </div>
 </footer>
 
+<!-- jQuery first, then Metro UI JS -->
+<script src=<%# ResolveUrl("https://code.jquery.com/jquery-3.3.1.min.js")%>></script>
+<script src=<%# ResolveUrl("weasel.js")%>></script>
+<script src=<%# ResolveUrl("https://cdn.metroui.org.ua/v4/js/metro.min.js")%>></script>
 </body>
 </html>
+
+{{end}}
+
