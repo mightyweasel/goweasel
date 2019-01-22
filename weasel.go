@@ -19,7 +19,7 @@ import (
 )
 
 
-const fav_icon_url = "http://www.canada.ca/etc/designs/canada/wet-boew/assets/favicon.ico"
+//const fav_icon_url = "http://www.canada.ca/etc/designs/canada/wet-boew/assets/favicon.ico"
 
 
 // WebView is a framework to send objects & data to a Web view
@@ -102,7 +102,8 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"isInString":  isInString,
 	}
 
-	baseTemplate := "weaseltemplates/gc-ermine.html"
+	//baseTemplate := "weaseltemplates/gc-ermine.html"
+	baseTemplate := "weaseltemplates/200.html"
 
 	tmpl[filename] = template.Must(template.New("").Funcs(funcMap).ParseFiles(baseTemplate))
 
@@ -120,7 +121,9 @@ func IndexHandler(w http.ResponseWriter, req *http.Request) {
 		Title: "Click counter: " + status,
 	}
 	// Render page
-	Render(w, "templates/gc-ermine.html", wv)
+	//Render(w, "weaseltemplates/gc-ermine.html", wv)
+	Render(w, "weaseltemplates/200.html", wv)
+
 }
 
 // AboutHandler renders a character in a Web page
@@ -132,7 +135,8 @@ func GuideHandler(w http.ResponseWriter, req *http.Request) {
 		Title: "Click counter: " + status,
 	}
 	// Render page
-	Render(w, "templates/gc-ermine.html", wv)
+	//Render(w, "weaseltemplates/gc-ermine.html", wv)
+	Render(w, "weaseltemplates/200.html", wv)
 }
 
 
@@ -148,7 +152,8 @@ func SearchHandler(w http.ResponseWriter, req *http.Request) {
 		Title: "Click counter: " + status,
 	}
 	// Render page
-	Render(w, "templates/gc-ermine.html", wv)
+	//Render(w, "weaseltemplates/gc-ermine.html", wv)
+	Render(w, "weaseltemplates/200.html", wv)
 }
 
 func RedirectHandler(w http.ResponseWriter, req *http.Request) {
