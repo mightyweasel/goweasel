@@ -20,7 +20,11 @@
             <h1 style="padding:0.3em;">
                 <a class="splash_link" href="/"><strong>alpha</strong></a> | ermine
                  {{ $Title := .Title }}
-                <span><strong>{{$Title}}</strong></span><a id="top" name="top"></a>
+                <span><strong>
+                    {{$Title}}
+                    {{ tmpluserstatus }}
+                    {{ tmplserverstatus }}
+                </strong></span><a id="top" name="top"></a>
             </h1>
         </div>
         <div class="cell-md-full cell-lg-8">

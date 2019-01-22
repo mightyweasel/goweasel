@@ -86,44 +86,30 @@ func isInString(s []string, t string) bool {
 }
 
 // Render combines templates, funcs and renders all Web pages in the app
-func Render(w http.ResponseWriter, filename string, data interface{}) {
-
-	tmpl := make(map[string]*template.Template)
-
-	// Set up FuncMap
-	funcMap := template.FuncMap{
-		"subtract":    subtract,
-		"add":         add,
-		"multiply":    multiply,
-		"divide":      divide,
-		"percent":     percent,
-		"isIn":        isIn,
-		"sliceString": sliceString,
-		"isInString":  isInString,
-	}
+func RenderRoute(w http.ResponseWriter, filename string, data interface{}) {
 
 	//baseTemplate := "weaseltemplates/gc-ermine.html"
-	baseTemplate := "weaseltemplates/200.html"
+	//baseTemplateRef := "base"
+	baseTemplate := "weaseltemplates/user-status.html"
+	baseTemplateRef := "tmpluserstatus"
 
-	tmpl[filename] = template.Must(template.New("").Funcs(funcMap).ParseFiles(baseTemplate))
-
-	if err := tmpl[filename].ExecuteTemplate(w, "base", data); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+    t, _ := template.ParseFiles( baseTemplate ) //setp 1
+	t.ExecuteTemplate(w, baseTemplateRef, data)
+    //t.Execute(w, "Hello World!") //step 2
 }
+
 
 // AboutHandler renders a character in a Web page
 func IndexHandler(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("IndexHandler call")
+	rs := fmt.Sprintf("%#v", req)
+	fmt.Println("IndexHandler call" + rs)
 	status := "weasel index"
 
 	wv := WebView {
 		Title: "Click counter: " + status,
 	}
 	// Render page
-	Render(w, "weaseltemplates/gc-ermine.html", wv)
-	//Render(w, "weaseltemplates/200.html", wv)
-
+	RenderRoute(w, "weaseltemplates/gc-ermine.html", wv)
 }
 
 // AboutHandler renders a character in a Web page
@@ -136,14 +122,15 @@ func GuideHandler(w http.ResponseWriter, req *http.Request) {
 		Title: "Click counter: " + status,
 	}
 	// Render page
-	Render(w, "weaseltemplates/gc-ermine.html", wv)
+	RenderRoute(w, "weaseltemplates/gc-ermine.html", wv)
 	//Render(w, "weaseltemplates/200.html", wv)
 }
 
 
 // AboutHandler renders a character in a Web page
 func SearchHandler(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("SearchHandler call")
+	rs := fmt.Sprintf("%#v", req)
+	fmt.Println("SearchHandler call" + rs)
 	status := "weasel search"
 	vars := mux.Vars(req)
 	q := vars["q"]
@@ -154,11 +141,12 @@ func SearchHandler(w http.ResponseWriter, req *http.Request) {
 	}
 	// Render page
 	//Render(w, "weaseltemplates/gc-ermine.html", wv)
-	Render(w, "weaseltemplates/200.html", wv)
+	RenderRoute(w, "weaseltemplates/gc-ermine.html", wv)
 }
 
 func RedirectHandler(w http.ResponseWriter, req *http.Request) {
-	fmt.Println("RedirectHandler call")
+	rs := fmt.Sprintf("%#v", req)
+	fmt.Println("RedirectHandler call" + rs)
 	vars := mux.Vars(req)
 	q := vars["q"]
 	
