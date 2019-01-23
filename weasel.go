@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"io/ioutil"
 	"os"
 	"net/http"
 	"html/template"
@@ -85,8 +86,11 @@ func isInString(s []string, t string) bool {
 	return false
 }
 
-var t *template.Template
 func RenderRoute(w http.ResponseWriter, data interface{}) {
+	t := templates.Lookup("base.html.tmpl")
+    //s1.ExecuteTemplate(os.Stdout, "header", nil)
+    //fmt.Println()
+    
 	// this line blow up with escaped html
 	if err := t.ExecuteTemplate(w, "base", data); err != nil {
     // this line is fine, it routes, but renders nuffin
@@ -147,14 +151,29 @@ func RedirectHandler(w http.ResponseWriter, req *http.Request) {
 	return
 }
 
+var templates *template.Template
+
 
 func weaselCreateRouter(port string) {
 	decoder  := schema.NewDecoder()
 	decoder.IgnoreUnknownKeys(true)
 	r := mux.NewRouter()	
 
-    t = template.Must(template.ParseGlob("weaseltemplates/*.html"))
+    var allFiles []string
+    files, err := ioutil.ReadDir("./weaseltemplates")
+    if err != nil {
+        fmt.Println(err)
+    }
+    for _, file := range files {
+        filename := file.Name()
+        if strings.HasSuffix(filename, ".tmpl") {
+            allFiles = append(allFiles, "./weaseltemplates/"+filename)
+        }
+    }
 
+	templates, err = template.ParseFiles(allFiles...) //parses all .tmpl files in the 'templates' folder
+   
+    
     r.HandleFunc("/", IndexHandler)
 	r.HandleFunc("/guide/", GuideHandler)
 	r.HandleFunc("/search/{q}", SearchHandler)
