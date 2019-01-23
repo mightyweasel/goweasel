@@ -12,7 +12,7 @@ import (
 	//"github.com/mightyweasel/goweasel/weaselgui"
 
 	"github.com/gorilla/mux"
-	//"github.com/gorilla/schema"
+	"github.com/gorilla/schema"
 	"github.com/joho/godotenv"
 
 	//"github.com/go-pg/pg"
@@ -85,23 +85,18 @@ func isInString(s []string, t string) bool {
 	return false
 }
 
-// Render combines templates, funcs and renders all Web pages in the app
-func RenderRoute(w http.ResponseWriter, filename string, data interface{}) {
-
-	//baseTemplate := "weaseltemplates/gc-ermine.html"
-	//baseTemplateRef := "base"
-	baseTemplate := "weaseltemplates/user-status.html"
-	baseTemplateRef := "tmpluserstatus"
-
-    t, _ := template.ParseFiles( baseTemplate ) //setp 1
-	t.ExecuteTemplate(w, baseTemplateRef, data)
-    //t.Execute(w, "Hello World!") //step 2
+var t *template.Template
+func RenderRoute(w http.ResponseWriter, data interface{}) {
+	// this line blow up with escaped html
+	if err := t.ExecuteTemplate(w, "base", data); err != nil {
+    // this line is fine, it routes, but renders nuffin
+    //if err := t.Execute(w, nil); err != nil {
+        log.Printf("Failed to execute template: %v", err)
+    }	
 }
-
-
-// AboutHandler renders a character in a Web page
 func IndexHandler(w http.ResponseWriter, req *http.Request) {
 	rs := fmt.Sprintf("%#v", req)
+	rs=""
 	fmt.Println("IndexHandler call" + rs)
 	status := "weasel index"
 
@@ -109,12 +104,11 @@ func IndexHandler(w http.ResponseWriter, req *http.Request) {
 		Title: "Click counter: " + status,
 	}
 	// Render page
-	RenderRoute(w, "weaseltemplates/gc-ermine.html", wv)
+	RenderRoute(w, wv)
 }
-
-// AboutHandler renders a character in a Web page
 func GuideHandler(w http.ResponseWriter, req *http.Request) {
 	rs := fmt.Sprintf("%#v", req)
+	rs=""
 	fmt.Println("GuideHandler call: " + rs)
 	status := "weasel guide"
 
@@ -122,14 +116,12 @@ func GuideHandler(w http.ResponseWriter, req *http.Request) {
 		Title: "Click counter: " + status,
 	}
 	// Render page
-	RenderRoute(w, "weaseltemplates/gc-ermine.html", wv)
+	RenderRoute(w, wv)
 	//Render(w, "weaseltemplates/200.html", wv)
 }
-
-
-// AboutHandler renders a character in a Web page
 func SearchHandler(w http.ResponseWriter, req *http.Request) {
 	rs := fmt.Sprintf("%#v", req)
+	rs=""
 	fmt.Println("SearchHandler call" + rs)
 	status := "weasel search"
 	vars := mux.Vars(req)
@@ -141,11 +133,11 @@ func SearchHandler(w http.ResponseWriter, req *http.Request) {
 	}
 	// Render page
 	//Render(w, "weaseltemplates/gc-ermine.html", wv)
-	RenderRoute(w, "weaseltemplates/gc-ermine.html", wv)
+	RenderRoute(w, wv)
 }
-
 func RedirectHandler(w http.ResponseWriter, req *http.Request) {
 	rs := fmt.Sprintf("%#v", req)
+	rs=""
 	fmt.Println("RedirectHandler call" + rs)
 	vars := mux.Vars(req)
 	q := vars["q"]
@@ -155,6 +147,24 @@ func RedirectHandler(w http.ResponseWriter, req *http.Request) {
 	return
 }
 
+
+func weaselCreateRouter(port string) {
+	decoder  := schema.NewDecoder()
+	decoder.IgnoreUnknownKeys(true)
+	r := mux.NewRouter()	
+
+    t = template.Must(template.ParseGlob("weaseltemplates/*.html"))
+
+    r.HandleFunc("/", IndexHandler)
+	r.HandleFunc("/guide/", GuideHandler)
+	r.HandleFunc("/search/{q}", SearchHandler)
+	r.HandleFunc("/redirect/{q}", RedirectHandler)	
+	
+	fmt.Println("Starting webserver on port " + port)
+	http.Handle("/", r)
+
+	log.Fatal(http.ListenAndServe(":"+port, r))
+}
 
 func main() {
 	env := os.Getenv("ENVIRONMENT")
@@ -176,19 +186,7 @@ func main() {
 	}
 	port = "8080"
 
-	//decoder  = schema.NewDecoder()
-	//decoder.IgnoreUnknownKeys(true)
-
-	r := mux.NewRouter()
-
-	fmt.Println("Starting "+os.Getenv("ENVIRONMENT")+" Webserver at port " + port)
-	r.HandleFunc("/", IndexHandler)
-	r.HandleFunc("/guide/", GuideHandler)
-	r.HandleFunc("/search/{q}", SearchHandler)
-	r.HandleFunc("/redirect/{q}", RedirectHandler)
+	weaselCreateRouter(port) 
 	
-	http.Handle("/", r)
-
-	log.Fatal(http.ListenAndServe(":"+port, r))
 }
 
