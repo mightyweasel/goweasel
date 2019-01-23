@@ -2,10 +2,19 @@ package weaseldatabase
 
 import (
     "fmt"
-
     "github.com/go-pg/pg"
     "github.com/go-pg/pg/orm"
 )
+
+func init() {
+    // we will use this later
+    fmt.Println("Init: Weasel Database Initialized!")    
+}
+// dummy function to show usage of package compilation
+func NoOp() {
+    i := "no-op success"
+    fmt.Println("weaseldatabase: " + i)        
+}
 
 type User struct {
     Id     int64

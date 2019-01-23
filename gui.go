@@ -74,7 +74,7 @@ func isInString(s []string, t string) bool {
 }
 
 var templates *template.Template
-func initalizeGuiTemplates() {
+func InitalizeGuiTemplates() {
 
     var allFiles []string
     files, err := ioutil.ReadDir("./weaseltemplates")

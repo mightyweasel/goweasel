@@ -71,7 +71,7 @@ func RedirectHandler(w http.ResponseWriter, req *http.Request) {
 	return
 }
 
-func weaselCreateRouter(port string) {
+func WeaselCreateRouter(port string) {
 	decoder  := schema.NewDecoder()
 	decoder.IgnoreUnknownKeys(true)
 	r := mux.NewRouter()	
