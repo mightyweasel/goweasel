@@ -5,8 +5,8 @@ import (
 )
 
 func init() {
-	// we will use this later
-	fmt.Println("Init: Weasel Models Initialized!")
+    // we will use this later
+    fmt.Println("Init: Weasel Models Initialized!")
 }
 // dummy function to show usage of package compilation
 func NoOp() {
