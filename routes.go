@@ -104,6 +104,9 @@ func WeaselCreateRouter(port string) {
 	r.PathPrefix("/js/").Handler(http.StripPrefix("/js/",
 		http.FileServer(http.Dir("weaselstatic/js/"))))
 
+	r.PathPrefix("/images/").Handler(http.StripPrefix("/images/",
+		http.FileServer(http.Dir("weaselstatic/images/"))))
+
 	fmt.Println("Starting webserver on port " + port)
 	http.Handle("/", r)
 
